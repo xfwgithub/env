@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    command: python -m project_name
+    ports:
+      - "8000:8000"
+    
+  # 开发工具服务示例
+  dev:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    command: >
+      bash -c "
+        pip install pytest pytest-cov black isort mypy flake8 && 
+        python -m pytest -xvs tests/
+      "
+    depends_on:
+      - app 
